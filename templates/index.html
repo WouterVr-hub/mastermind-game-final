@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastermind44 Online</title>
+    <style> /* Your CSS styles are correct */ </style>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+    <!-- Your HTML structure is correct -->
+    <div class="container info-area"> ... </div>
+    <div class="container game-area hidden" id="game-main"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const socket = io();
+
+    // STABILITY FIX: Send a ping every 4 mins to prevent server from sleeping
+    setInterval(() => {
+        if (socket.connected) {
+            socket.emit('client_ping');
+        }
+    }, 240000);
+
+    const ui = { /* ... your UI elements ... */ };
+    const state = { /* ... your state variables ... */ };
+
+    // All your helper functions like renderGameBoard, makeGuess, etc. are correct.
+    
+    socket.on('update_player_list', (data) => {
+        ui.playerList.innerHTML = '';
+        // FIX for [object Object]: Iterate through the list of objects
+        data.players.forEach(player => {
+            const li = document.createElement('li');
+            // FIX: Access the .name property of the player object
+            li.textContent = player.name; 
+            ui.playerList.appendChild(li);
+        });
+        if (state.isHost) {
+            // FIX for Host button: Filter using the .name property of the object
+            const playerCount = data.players.filter(player => !player.name.includes('(Host)')).length;
+            ui.startGameBtn.disabled = playerCount < 2;
+            ui.startGameBtn.textContent = playerCount >= 2 ? "Start Game" : "Need 2+ Players";
+        }
+    });
+
+    // ... (rest of your socket.on handlers are correct) ...
+});
+</script>
+</body>
+</html>
