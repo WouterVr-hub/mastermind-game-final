@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const socket = io();
 
     // STABILITY FIX: Ping server every 4 mins to prevent spin-down
-    setInterval(() => { if (socket.connected) socket.emit('client_ping'); }, 240000);
+    setInterval(() => { if (socket.connected) socket.emit('client_ping'); }, 24000);
 
     const ui = { loginArea: document.getElementById('login-area'), gameControls: document.getElementById('game-controls'), gameMain: document.getElementById('game-main'), hostControls: document.getElementById('host-controls'), playerList: document.getElementById('player-list'), statusMessage: document.getElementById('status-message'), myName: document.getElementById('my-name'), secretPieceDisplay: document.getElementById('secret-piece-display'), hostOverviewDisplay: document.getElementById('host-overview-display'), startGameBtn: document.getElementById('start-game-btn'), resetGameBtn: document.getElementById('reset-game-btn') };
     const state = { myName: '', isHost: false, GUESS_OPTIONS: [] };
